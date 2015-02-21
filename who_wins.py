@@ -24,7 +24,7 @@ def who_wins(player1_threshold, player2_threshold):
 
 	if player1_score > 100:
 		player1_score = 0
-	
+
 	# player2 respins on 60 or less or if losing
 	player2_score = spin()
 	if player2_score < player1_score or player2_score <= player2_threshold:
@@ -53,7 +53,7 @@ def who_wins(player1_threshold, player2_threshold):
 		result = result | 4
 
 	return result
-		
+
 if __name__ == "__main__":
 	parser = optparse.OptionParser()
 	parser.add_option("--iterations", "-n", type="int", default=10000)
