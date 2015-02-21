@@ -54,18 +54,55 @@ def who_wins(player1_threshold, player2_threshold):
 
 	return result
 
+def makePlot(filename, data):
+        import numpy as np
+        import matplotlib
+        import matplotlib.pyplot as plt
+
+        data.sort(key=lambda x: x[1])  # sort the data, helps the pie
+
+        labels = [m[0] for m in data]  # extract the labels
+        sizes  = [m[1] for m in data]  # extract the values
+
+        # make better colors and cycle through them
+        cmap = plt.cm.prism
+        colors = cmap(np.linspace(0., 0.75, len(sizes)))
+
+        fig = plt.figure()
+
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%',
+                startangle=0,  # this helps with the labels of the small slices
+                wedgeprops={'linewidth':'0'},     # makes the pie look nicer
+                colors = colors,                  # use our pretty colors
+                textprops={'fontsize':'x-small'}) # make the %s small to fit in pies
+
+        # Set aspect ratio to be equal so that pie is drawn as a circle.
+        plt.axis('equal')
+
+        fig.savefig(filename, format="png")
+
 if __name__ == "__main__":
 	parser = optparse.OptionParser()
 	parser.add_option("--iterations", "-n", type="int", default=10000)
 	parser.add_option("--player-1-threshold", "-1", type="int", default=65)
 	parser.add_option("--player-2-threshold", "-2", type="int", default=60)
+        parser.add_option("--plot", "-p",
+                          help="filename into which to put pie chart",
+                          metavar="PLOTFILE")
 	opts, args = parser.parse_args()
 
 	results = [0, 0, 0, 0, 0, 0, 0, 0]
+        allResults = []
 	for iteration in range(opts.iterations):
 		outcome = who_wins(opts.player_1_threshold, opts.player_2_threshold)
 		results[outcome] = results[outcome] + 1
 
 	for result in range(1, len(results)):
 		outcome_pct = results[result] * 100.0 / opts.iterations
-		print "%s,%3.2f" % (outcomes[result], outcome_pct)
+                if opts.plot:
+                        allResults.append([outcomes[result], outcome_pct])
+                else:
+                        print "%s,%3.2f" % (outcomes[result], outcome_pct)
+
+        if opts.plot:
+                makePlot(opts.plot, allResults)
