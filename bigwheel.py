@@ -57,7 +57,7 @@ def win_pct(first_spin, spin_again, iterations):
 	return win_pct
 
 
-def makePlot (filename, data):
+def makePlot (filename, xkcd, data):
         import numpy as np
         import matplotlib
         import matplotlib.pyplot as plt
@@ -67,7 +67,8 @@ def makePlot (filename, data):
         spin = [m[2] for m in data]
 
         fig = plt.figure()
-        # plt.xkcd() # uncomment for xkcd style plots
+        if xkcd:
+                plt.xkcd() # uncomment for xkcd style plots
         fig.suptitle("Price is Right Spin Strategy",
                      fontsize=14, fontweight='bold')
         ax = plt.subplot(111)                 # get default subplot to make it nice
@@ -98,6 +99,8 @@ if __name__ == "__main__":
         parser.add_option("--plot", "-p",
                           help="filename for plotted output (png)",
                           metavar="PLOTFILE")
+        parser.add_option("--xkcd", "-x", action="store_true",
+                          help="make plot in the style of xkcd")
 	opts, args = parser.parse_args()
 
         allResults = []
@@ -112,4 +115,4 @@ if __name__ == "__main__":
                         print ",".join([str(n) for n in spinResults])
 
         if opts.plot:
-                makePlot(opts.plot, allResults)
+                makePlot(opts.plot, opts.xkcd, allResults)
