@@ -65,7 +65,7 @@ def makePlot(filename, xkcd, data):
         sizes  = [m[1] for m in data]  # extract the values
 
         # make better colors and cycle through them
-        cmap = plt.cm.prism
+        cmap = plt.cm.GnBu   # http://matplotlib.org/examples/color/colormaps_reference.html
         colors = cmap(np.linspace(0., 0.75, len(sizes)))
 
         fig = plt.figure()
