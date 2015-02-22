@@ -54,7 +54,7 @@ def who_wins(player1_threshold, player2_threshold):
 
 	return result
 
-def makePlot(filename, data):
+def makePlot(filename, xkcd, data):
         import numpy as np
         import matplotlib
         import matplotlib.pyplot as plt
@@ -69,6 +69,9 @@ def makePlot(filename, data):
         colors = cmap(np.linspace(0., 0.75, len(sizes)))
 
         fig = plt.figure()
+
+        if xkcd:
+                plt.xkcd() # uncomment for xkcd style plots
 
         plt.pie(sizes, labels=labels, autopct='%1.1f%%',
                 startangle=0,  # this helps with the labels of the small slices
@@ -89,6 +92,9 @@ if __name__ == "__main__":
         parser.add_option("--plot", "-p",
                           help="filename into which to put pie chart",
                           metavar="PLOTFILE")
+        parser.add_option("--xkcd", "-x", action="store_true",
+                          help="make plot in the style of xkcd")
+
 	opts, args = parser.parse_args()
 
 	results = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -105,4 +111,4 @@ if __name__ == "__main__":
                         print "%s,%3.2f" % (outcomes[result], outcome_pct)
 
         if opts.plot:
-                makePlot(opts.plot, allResults)
+                makePlot(opts.plot, opts.xkcd, allResults)
